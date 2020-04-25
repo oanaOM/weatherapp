@@ -1,4 +1,4 @@
-package weatherapp
+package client
 
 import (
 	"log"

@@ -12,3 +12,7 @@ type MyHandler struct {
 func (mh MyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("Hello %v", mh.Greeting)))
 }
+
+// func SumTwo(a, b int) int {
+// 	return a + b
+// }

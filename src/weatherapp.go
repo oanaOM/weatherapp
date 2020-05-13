@@ -1,4 +1,4 @@
-package weatherapp
+package main
 /*
 * Weather or Not! is a weather app that shows the weather at your current location
 */
@@ -10,6 +10,8 @@ import (
 	"math"
 	"net/http"
 	"text/template"
+	"path"
+	"log"
 )
 
 /*Weather custom type that stores our weather variables */
@@ -23,10 +25,12 @@ type Weather struct {
 func main() {
 
 	http.HandleFunc("/", ShowWeather)
-	http.ListenAndServe(":8081", nil)
+	if err:=http.ListenAndServe(":8080", nil);err!=nil{
+		log.Fatalf("Could not listen on mentioned port: %v", err)
+	}
 
 }
-
+// MyRequestHTTP retrieve the data
 func MyRequestHTTP(url string) map[string]interface{} {
 	var responseData map[string]interface{}
 	response, err := http.Get(url)
@@ -74,65 +78,17 @@ func ShowWeather(w http.ResponseWriter, r *http.Request) {
 
 	myWeather := GetWeather()
 	
-	// fp := path.Join("templates", "index.html")
-	// tmpl, err := template.ParseFiles(fp)
-	// if err != nil {
-	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
+	fp := path.Join("templates", "index.html")
+	tmpl, err := template.ParseFiles(fp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	if err := tmpl.Execute(w, myWeather); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 
 }
-
-
-
-// tmpl is the HTML template that drives the user interface.
-var tmpl = template.Must(template.New("tmpl").Parse(`
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="Oana M.">
-    <meta name="generator" content="">
-    <title>Weather or Not</title>
-
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-  </head>
-  <body class="text-center">
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <main role="main" class="inner cover">
-        <h1>{{ .City}}</h1>
-        <h3>{{ .Temperatura }}&#8451;</h3>
-        <p>{{ .Summary }}</p>
-        <div>
-            <canvas id="icon1" width="128" height="128"></canvas>
-        </div>
-    </main>
-
-  <footer class="mastfoot mt-auto">
-    <div class="inner">
-      <small>Developed by a newbie gopher.</small>
-    </div>
-  </footer>
-
-    <script src="https://gitcdn.link/cdn/darkskyapp/skycons/master/skycons.js"></script>
-    <script>
-        var skycons = new Skycons({ "color": "blue" })
-        skycons.add("icon1", "{{ .Icon }}")
-    </script>
-</div>
-</body>
-</html>
-`))

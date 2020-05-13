@@ -1,4 +1,4 @@
-package weatherapp
+package main
 
 import (
 	"testing"
@@ -6,7 +6,7 @@ import (
 )
 
 func TestGetWeather(t *testing.T){
-	got := GetWeather("")
+	got := GetWeather()
 
 	fmt.Println(got)
 

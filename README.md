@@ -20,7 +20,12 @@ For this app to work, you need to have [Go](https://golang.org) installed on you
 ## How to run weather web app locally
 Once you have Go up and running, open a terminal, clone this repo in a new folder, navigate to  *src/webApp* folder and type 
 
-    go run main.go
+```
+cd src
+
+go run main.go
+```
+
 Open your favorite browser and navigate to your http://127.0.0.1:8080/
 
 ## Docker

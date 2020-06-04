@@ -1,19 +1,16 @@
-# Start from a Debian image with the latest version of Go installed
-# and a workspace (GOPATH) configured at /go.
+# Telling to use Docker's golang ready image
 FROM golang
-
-# Copy the local package files to the container's workspace.
-COPY . /go/src/github.com/oanaOM/weatherapp/src
-COPY templates/index.html /go/src/github.com/oanaOM/weatherapp/src/templates
-
-# Build the weatherapp command inside the container.
-# (You may fetch or manage dependencies here,
-# either manually or with a tool like "godep".)
-RUN go install github.com/oanaOM/weatherapp/src
-
-# Run the weatherapp command by default when the container starts.
-ENTRYPOINT /go/bin/src
-
-# Document that the service listens on port 8080.
+# Name and Email of the author 
+MAINTAINER OM 
+# Create app folder 
+RUN mkdir /app
+# Copy our file in the host contianer to our contianer
+ADD . /app
+# Set /app to the go folder as workdir
+WORKDIR /app
+# Generate binary file from our /app
+RUN go build
+# Expose the port 8080
 EXPOSE 8080
-
+# Run the app binarry file 
+CMD ["./app"]
